@@ -4,7 +4,7 @@ defmodule Teenager do
       String.ends_with? input, "?" -> "Sure."
       String.length(String.strip(input)) == 0 -> "Fine. Be that way!"
       # This is kind of weird, but it makes sure that there are alpha chars
-      String.upcase(input) == input && String.downcase(input) != input -> "Whoa, chill out!"
+      String.upcase(input) == input and String.downcase(input) != input -> "Whoa, chill out!"
       true -> "Whatever."
     end
   end
