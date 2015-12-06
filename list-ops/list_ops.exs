@@ -7,38 +7,63 @@ defmodule ListOps do
   # automatically imported) and so shouldn't be used either.
 
   @spec count(list) :: non_neg_integer
-  def count(l) do
+  def count([]), do: 0
 
-  end
+  @spec count(list) :: non_neg_integer
+  def count([head | tail]), do: 1 + count(tail)
 
   @spec reverse(list) :: list
-  def reverse(l) do
+  def reverse([]), do: []
 
-  end
+  # TODO:  Is this cheating??
+  @spec reverse(list) :: list
+  def reverse([head | tail]), do: reverse(tail) |> append([head])
 
   @spec map(list, (any -> any)) :: list
-  def map(l, f) do
+  def map([], f), do: []
 
+  @spec map(list, (any -> any)) :: list
+  def map([head | tail], f) do
+    [f.(head) | map(tail, f)]
   end
 
   @spec filter(list, (any -> as_boolean(term))) :: list
-  def filter(l, f) do
+  def filter([], f), do: []
 
+  @spec filter(list, (any -> as_boolean(term))) :: list
+  def filter([head | tail], f) do
+    if f.(head) do
+      [head | filter(tail, f)]
+    else
+      filter(tail, f)
+    end
   end
 
   @type acc :: any
   @spec reduce(list, acc, ((any, acc) -> acc)) :: acc
-  def reduce(l, acc, f) do
+  def reduce([], acc, f), do: acc
 
+  @spec reduce(list, acc, ((any, acc) -> acc)) :: acc
+  def reduce([head | tail], acc, f) do
+    f.(head, reduce(tail, acc, f))
   end
 
   @spec append(list, list) :: list
-  def append(a, b) do
+  def append([], b), do: b
 
+  @spec append(list, list) :: list
+  def append(a, []), do: a
+
+  @spec append(list, list) :: list
+  def append([a], b), do: [a | b]
+
+  @spec append(list, list) :: list
+  def append([head | tail], b) do
+    [head | append(tail, b)]
   end
 
   @spec concat([[any]]) :: [any]
   def concat(ll) do
-
+    reduce(ll, [], &append/2)
   end
 end
