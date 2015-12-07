@@ -13,11 +13,9 @@ defmodule ListOps do
   def count([head | tail]), do: 1 + count(tail)
 
   @spec reverse(list) :: list
-  def reverse([]), do: []
-
-  # TODO:  Is this cheating??
-  @spec reverse(list) :: list
-  def reverse([head | tail]), do: reverse(tail) |> append([head])
+  def reverse(l), do: _reverse(l, [])
+  defp _reverse([], reversed), do: reversed
+  defp _reverse([head | tail], reversed), do: _reverse(tail, [head | reversed])
 
   @spec map(list, (any -> any)) :: list
   def map([], f), do: []
