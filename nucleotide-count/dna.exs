@@ -12,9 +12,15 @@ defmodule DNA do
   iex> DNA.count('AATAA', ?T)
   1
   """
-  @spec count([char], char) :: non_neg_integer
-  def count(strand, nucleotide) do
+  @spec count([], char) :: non_neg_integer
+  def count([], nucleotide), do: 0
 
+  @spec count([char], char) :: non_neg_integer
+  def count([first_char | strand], nucleotide) do
+    case first_char do
+      ^nucleotide -> 1 + count(strand, nucleotide)
+      _ -> count(strand, nucleotide)
+    end
   end
 
 
@@ -28,6 +34,11 @@ defmodule DNA do
   """
   @spec nucleotide_counts([char]) :: Dict.t
   def nucleotide_counts(strand) do
-
+    %{
+      ?A => count(strand, ?A),
+      ?T => count(strand, ?T),
+      ?C => count(strand, ?C),
+      ?G => count(strand, ?G)
+    }
   end
 end
