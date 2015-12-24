@@ -18,7 +18,13 @@ defmodule Phone do
   """
   @spec number(String.t) :: String.t
   def number(raw) do
+    stripped = String.replace(raw, ~r/[\(\)\-\. ]/, "")
 
+    case {String.length(stripped), String.first(stripped)} do
+      {10, _}   -> stripped
+      {11, "1"} -> String.slice(stripped, 1..-1)
+      {_, _}    -> "0000000000"
+    end
   end
 
   @doc """
@@ -40,7 +46,7 @@ defmodule Phone do
   """
   @spec area_code(String.t) :: String.t
   def area_code(raw) do
-  
+    raw |> number |> String.slice(0..2)
   end
 
   @doc """
@@ -62,6 +68,11 @@ defmodule Phone do
   """
   @spec pretty(String.t) :: String.t
   def pretty(raw) do
-  
+    num = number(raw)
+    area = String.slice(num, 0..2)
+    first = String.slice(num, 3..5)
+    last = String.slice(num, 6..-1)
+
+    "(#{area}) #{first}-#{last}"
   end
 end
