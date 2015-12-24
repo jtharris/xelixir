@@ -10,7 +10,7 @@ defmodule School do
   """
   @spec add(Dict.t, String.t, pos_integer) :: Dict.t
   def add(db, name, grade) do
-    Dict.update(db, grade, [name], fn x -> [name | x] end)
+    Dict.update(db, grade, [name], &([name | &1]))
   end
 
   @doc """
