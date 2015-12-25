@@ -9,6 +9,8 @@ defmodule ETL do
   """
   @spec transform(Dict.t) :: map()
   def transform(input) do
-
+    Enum.flat_map(input, fn {k, v} ->
+      Enum.map(v, &({String.downcase(&1), k}))
+    end) |> Enum.into(%{})
   end
 end

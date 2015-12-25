@@ -10,7 +10,6 @@ ExUnit.configure exclude: :pending, trace: true
 defmodule TransformTest do
   use ExUnit.Case, async: true
 
-  # @tag :pending
   test "transform one value" do
     old = %{1 => ["WORLD"]}
     expected = %{"world" => 1}
@@ -18,7 +17,6 @@ defmodule TransformTest do
     assert ETL.transform(old) == expected
   end
 
-  @tag :pending
   test "transform more values" do
     old = %{1 => ["WORLD", "GSCHOOLERS"]}
     expected = %{"world" => 1, "gschoolers" => 1}
@@ -26,7 +24,6 @@ defmodule TransformTest do
     assert ETL.transform(old) == expected
   end
 
-  @tag :pending
   test "more keys" do
     old = %{1 => ["APPLE", "ARTICHOKE"], 2 => ["BOAT", "BALLERINA"]}
     expected = %{
@@ -39,7 +36,6 @@ defmodule TransformTest do
     assert ETL.transform(old) == expected
   end
 
-  @tag :pending
   test "full dataset" do
     old = %{
       1 =>  ~W(A E I O U L N R S T),
