@@ -17,22 +17,36 @@ defmodule Meetup do
   """
   @spec meetup(pos_integer, pos_integer, weekday, schedule) :: :calendar.date
   def meetup(year, month, weekday, schedule) do
+    first = first_date(year, month, weekday)
+
+    case schedule do
+      :first -> {year, month, first}
+      :second -> {year, month, first + 7}
+      :third -> {year, month, first + 14}
+      :fourth -> {year, month, first + 21}
+      :last -> {year, month, last(first, month)}
+      :teenth -> {year, month, teenth(first)}
+    end
+  end
+
+  defp first_date(year, month, weekday) do
+    weekday_ordinal(weekday) - day_of_first(year, month) + 7 |> rem(7) |> + 1
+  end
+
+  defp day_of_first(year, month) do
     year_ord = year_ordinal(year, month)
 
     y = rem(year_ord, 100)
     c = div(year_ord, 100)
     m = rem(month + 9, 12) + 1
 
-    day_of_first = 1 + trunc((2.6 * m) - 0.2) + y + div(y, 4) + div(c, 4) - (2 * c) |> rem(7)
-    first_date = (weekday_ordinal(weekday) - day_of_first + 7) |> rem(7) |> + 1
+    1 + trunc((2.6 * m) - 0.2) + y + div(y, 4) + div(c, 4) - (2 * c) |> rem(7)
+  end
 
-    case schedule do
-      :first -> {year, month, first_date}
-      :second -> {year, month, first_date + 7}
-      :third -> {year, month, first_date + 14}
-      :fourth -> {year, month, first_date + 21}
-      :last -> {year, month, last(first_date, month, year)}
-      :teenth -> {year, month, teenth(first_date)}
+  defp year_ordinal(year, month) do
+    case month do
+      x when x > 2 -> year
+      _ -> year - 1
     end
   end
 
@@ -43,7 +57,7 @@ defmodule Meetup do
     end
   end
 
-  defp last(first_date, month, year) do
+  defp last(first_date, month) do
     last_day = case month do
       2  -> 28  # No test case for leap year...
       4  -> 30
@@ -56,13 +70,6 @@ defmodule Meetup do
     case first_date + 28 do
       x when x <= last_day -> x
       x -> x - 7
-    end
-  end
-
-  defp year_ordinal(year, month) do
-    case month do
-      x when x > 2 -> year
-      _ -> year - 1
     end
   end
 
