@@ -60,10 +60,7 @@ defmodule Meetup do
   defp last(first_date, month) do
     last_day = case month do
       2  -> 28  # No test case for leap year...
-      4  -> 30
-      6  -> 30
-      9  -> 30
-      11 -> 30
+      x when x in [4, 6, 9, 11] -> 30
       _  -> 31
     end
 
